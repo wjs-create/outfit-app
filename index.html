@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>今日穿搭 — 你的数字衣橱和每日搭配助手</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="site-brand" href="#app">
+        <span class="brand-mark">今</span>
+        <span>
+          <strong>今日穿搭</strong>
+          <small>数字衣橱 · 每日搭配</small>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="网站导航">
+        <a href="#app">试用</a>
+        <a href="#launch">路线</a>
+        <a href="#waitlist">内测</a>
+      </nav>
+    </header>
+
+    <main>
+      <section id="app" class="app-shell">
+      <aside class="sidebar">
+        <div class="brand-block">
+          <div class="brand-mark">今</div>
+          <div>
+            <h1>今日穿搭</h1>
+            <p>你的数字衣橱和每日搭配助手</p>
+          </div>
+        </div>
+
+        <nav class="tabs" aria-label="主要视图">
+          <button class="tab-button is-active" data-view="closetView" type="button">衣橱</button>
+          <button class="tab-button" data-view="plannerView" type="button">搭配</button>
+          <button class="tab-button" data-view="insightsView" type="button">偏好</button>
+        </nav>
+
+        <section class="today-strip" aria-label="今日状态">
+          <span id="itemCount">0 件衣服</span>
+          <span id="favoriteCount">0 套收藏</span>
+        </section>
+
+        <section class="beta-badge" aria-label="公测说明">
+          公测中，全部功能免费使用
+        </section>
+      </aside>
+
+      <section class="content">
+        <section class="intro-band" aria-label="网站简介">
+          <div>
+            <p class="eyebrow">免费工具 · 无需下载</p>
+            <h2>明天穿什么？<br>把你衣橱里的衣服用起来</h2>
+          </div>
+          <p>
+            上传衣服照片或粘贴商品图，输入今天的天气、心情和场合。<strong>不用再对着一柜子衣服发呆。</strong>
+          </p>
+        </section>
+
+        <section id="closetView" class="view is-visible">
+          <div class="page-head">
+            <div>
+              <p class="eyebrow">数字衣橱</p>
+              <h2>录入衣服</h2>
+            </div>
+            <div class="head-actions">
+              <button id="quickSeedButton" class="ghost-button" type="button">没有衣服？一键导入示例衣橱试试</button>
+            </div>
+          </div>
+
+          <section class="closet-layout">
+            <form id="itemForm" class="entry-panel">
+              <input type="hidden" id="editingItemId" value="" />
+
+              <!-- 快速导入区域 -->
+              <div class="fetch-row">
+                <input id="fetchLinkInput" type="text" placeholder="粘贴图片链接 或 商品页链接" />
+                <button id="fetchButton" class="primary-button" type="button">导入</button>
+              </div>
+              <p id="fetchStatus" class="fetch-status"></p>
+
+              <label class="photo-drop">
+                <input id="itemImage" name="image" type="file" accept="image/*" />
+                <span id="photoPreview" class="photo-preview"></span>
+                <span class="photo-text">选择照片 或 直接 Ctrl+V 粘贴截图</span>
+              </label>
+              <button id="removeBgButton" class="ghost-button" type="button" style="width:100%;">去除背景（AI抠图）</button>
+              <label>
+                商品图链接（右键商品图 → 复制图像地址 → 粘贴）
+                <input id="itemImageUrl" type="url" placeholder="https://img.example.com/item.jpg" />
+              </label>
+
+              <div class="form-grid">
+                <label>
+                  名称
+                  <input id="itemName" required placeholder="白色衬衫" />
+                </label>
+                <label>
+                  品类
+                  <select id="itemCategory">
+                    <option value="top">上衣</option>
+                    <option value="bottom">下装</option>
+                    <option value="dress">连衣裙/套装</option>
+                    <option value="outer">外套</option>
+                    <option value="shoes">鞋</option>
+                    <option value="bag">包</option>
+                    <option value="accessory">配饰</option>
+                  </select>
+                </label>
+                <label>
+                  主色
+                  <input id="itemColor" placeholder="白色" />
+                </label>
+                <label>
+                  材质
+                  <input id="itemMaterial" placeholder="棉 / 羊毛 / 牛仔" />
+                </label>
+                <label>
+                  厚薄
+                  <select id="itemThickness">
+                    <option value="light">薄</option>
+                    <option value="medium">适中</option>
+                    <option value="warm">厚</option>
+                  </select>
+                </label>
+                <label>
+                  季节
+                  <select id="itemSeason">
+                    <option value="all">四季</option>
+                    <option value="spring">春</option>
+                    <option value="summer">夏</option>
+                    <option value="autumn">秋</option>
+                    <option value="winter">冬</option>
+                  </select>
+                </label>
+              </div>
+
+              <label>
+                风格标签
+                <input id="itemStyles" placeholder="通勤, 简洁, 休闲" />
+              </label>
+              <label>
+                适合场合
+                <input id="itemOccasions" placeholder="上班, 约会, 运动" />
+              </label>
+              <label>
+                网购链接
+                <input id="itemUrl" type="url" placeholder="https://..." />
+              </label>
+              <label>
+                备注
+                <textarea id="itemNotes" rows="3" placeholder="容易皱、适合打底、偏宽松"></textarea>
+              </label>
+
+              <div class="form-actions">
+                <button class="primary-button" type="submit" id="saveItemButton">保存衣服</button>
+                <button id="cancelEditButton" class="ghost-button" type="button" style="display:none;">取消编辑</button>
+                <button id="resetFormButton" class="ghost-button" type="button">清空</button>
+              </div>
+            </form>
+
+            <section class="closet-panel">
+              <div class="filter-row">
+                <input id="searchInput" type="search" placeholder="搜索衣服、颜色、标签" />
+                <select id="categoryFilter">
+                  <option value="all">全部品类</option>
+                  <option value="top">上衣</option>
+                  <option value="bottom">下装</option>
+                  <option value="dress">连衣裙/套装</option>
+                  <option value="outer">外套</option>
+                  <option value="shoes">鞋</option>
+                  <option value="bag">包</option>
+                  <option value="accessory">配饰</option>
+                </select>
+              </div>
+              <div id="closetGrid" class="closet-grid"></div>
+            </section>
+          </section>
+        </section>
+
+        <section id="plannerView" class="view">
+          <div class="page-head">
+            <div>
+              <p class="eyebrow">每日搭配</p>
+              <h2>今天穿什么</h2>
+            </div>
+          </div>
+
+          <form id="plannerForm" class="planner-panel">
+            <label>
+              温度
+              <input id="temperature" type="number" value="22" min="-20" max="45" />
+            </label>
+            <label>
+              天气
+              <select id="weather">
+                <option value="clear">晴</option>
+                <option value="cloudy">多云</option>
+                <option value="rain">雨</option>
+                <option value="wind">风大</option>
+                <option value="snow">雪</option>
+              </select>
+            </label>
+            <label>
+              心情
+              <select id="mood">
+                <option value="calm">平静</option>
+                <option value="bright">想显气色</option>
+                <option value="confident">想有气场</option>
+                <option value="soft">想温柔一点</option>
+                <option value="lazy">想省心舒服</option>
+              </select>
+            </label>
+            <label>
+              场合
+              <select id="occasion">
+                <option value="上班">上班</option>
+                <option value="约会">约会</option>
+                <option value="朋友聚会">朋友聚会</option>
+                <option value="运动">运动</option>
+                <option value="旅行">旅行</option>
+                <option value="正式场合">正式场合</option>
+              </select>
+            </label>
+            <label>
+              想要风格
+              <input id="styleGoal" placeholder="简洁、松弛、显瘦、有质感" />
+            </label>
+            <label>
+              指定单品
+              <select id="anchorItem">
+                <option value="">不指定</option>
+              </select>
+            </label>
+            <button class="primary-button planner-submit" type="submit">生成搭配</button>
+          </form>
+
+          <div id="outfitResults" class="outfit-results"></div>
+          <div id="regenerateArea" class="regenerate-area" style="display:none;">
+            <button id="regenerateButton" class="ghost-button" type="button">换一批搭配</button>
+          </div>
+        </section>
+
+        <section id="insightsView" class="view">
+          <div class="page-head">
+            <div>
+              <p class="eyebrow">偏好学习</p>
+              <h2>你的穿搭倾向</h2>
+            </div>
+          </div>
+          <section class="insight-grid">
+            <div class="metric-tile">
+              <span>衣橱数量</span>
+              <strong id="metricItems">0</strong>
+            </div>
+            <div class="metric-tile">
+              <span>收藏搭配</span>
+              <strong id="metricFavorites">0</strong>
+            </div>
+            <div class="metric-tile">
+              <span>常见颜色</span>
+              <strong id="metricColor">-</strong>
+            </div>
+            <div class="metric-tile">
+              <span>常用风格</span>
+              <strong id="metricStyle">-</strong>
+            </div>
+          </section>
+          <div id="feedbackList" class="feedback-list"></div>
+        </section>
+      </section>
+
+      <section id="launch" class="website-section">
+        <div class="section-head">
+          <p class="eyebrow">上线路线</p>
+          <h2>先验证需求，再逐步开发</h2>
+        </div>
+        <div class="launch-grid">
+          <article>
+            <span>01</span>
+            <h3>小红书找第一批用户</h3>
+            <p>发衣橱诊断、通勤穿搭、胶囊衣橱和"每天不知道穿什么"的真实案例。</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>收集反馈持续迭代</h3>
+            <p>根据真实用户的使用习惯和痛点，不断优化录入、搭配和预览体验。</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>功能完善后探索商业化</h3>
+            <p>当用户持续上传衣服、连续使用并愿意付费，再开通高级功能和订阅。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="waitlist" class="website-section waitlist-section">
+        <div class="section-head">
+          <p class="eyebrow">内测报名</p>
+          <h2>收集第一批真实衣橱</h2>
+        </div>
+        <form id="waitlistForm" class="waitlist-form">
+          <label>
+            昵称
+            <input id="leadName" placeholder="怎么称呼你" />
+          </label>
+          <label>
+            联系方式
+            <input id="leadContact" placeholder="微信 / 手机 / 邮箱" />
+          </label>
+          <label>
+            最大穿搭困扰
+            <textarea id="leadPain" rows="3" placeholder="比如：上班不知道穿什么、衣服很多但不会搭、想少买衣服"></textarea>
+          </label>
+          <button class="primary-button" type="submit">保存报名</button>
+          <p id="waitlistStatus" class="form-status" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>今日穿搭</span>
+      <span>把已有的衣服穿出自信。</span>
+    </footer>
+
+    <template id="itemTemplate">
+      <article class="item-card">
+        <div class="item-image"></div>
+        <div class="item-body">
+          <div class="item-title-row">
+            <h3></h3>
+            <div class="card-actions">
+              <button class="icon-button edit-item" type="button" aria-label="编辑" title="编辑">✎</button>
+              <button class="icon-button delete-item" type="button" aria-label="删除" title="删除">×</button>
+            </div>
+          </div>
+          <p class="item-meta"></p>
+          <div class="tag-row"></div>
+          <a class="item-link" target="_blank" rel="noreferrer">网购链接</a>
+        </div>
+      </article>
+    </template>
+
+    <template id="outfitTemplate">
+      <article class="outfit-card">
+        <div class="outfit-preview"></div>
+        <div class="outfit-copy">
+          <div class="item-title-row">
+            <h3></h3>
+            <span class="outfit-score"></span>
+          </div>
+          <p class="outfit-reason"></p>
+          <div class="outfit-items"></div>
+          <div class="outfit-actions">
+            <button class="ghost-button like-outfit" type="button">喜欢</button>
+            <button class="ghost-button dislike-outfit" type="button">不喜欢</button>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <script src="wardrobe-core.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

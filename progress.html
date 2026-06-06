@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>工作进度 — Claude Code</title>
+  <style>
+    :root { --bg:#1a1d23; --panel:#21242b; --ink:#e1e4e8; --muted:#8b949e; --accent:#58a6ff; --green:#3fb950; --yellow:#d2991d; --red:#f85149; --line:#30363d; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:-apple-system,BlinkMacSystemFont,'SF Mono','Menlo',monospace; background:var(--bg); color:var(--ink); min-height:100vh; padding:24px; line-height:1.5; }
+    .container { max-width:860px; margin:0 auto; }
+    .header { display:flex; align-items:center; gap:12px; padding-bottom:20px; border-bottom:1px solid var(--line); margin-bottom:24px; }
+    .pulse { width:12px; height:12px; border-radius:50%; background:var(--green); animation:pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .header h1 { font-size:18px; font-weight:600; }
+    .header span { color:var(--muted); font-size:13px; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:18px; }
+    .card.full { grid-column:1/-1; }
+    .card h2 { font-size:13px; text-transform:uppercase; letter-spacing:0.8px; color:var(--muted); margin-bottom:14px; }
+    .badge { display:inline-block; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600; margin-right:8px; }
+    .badge.done { background:#16301a; color:var(--green); }
+    .badge.active { background:#1a2810; color:var(--yellow); }
+    .badge.wait { background:#1c1f27; color:var(--muted); }
+    .badge.block { background:#2a1616; color:var(--red); }
+    .item { padding:10px 0; border-bottom:1px solid var(--line); }
+    .item:last-child { border-bottom:none; }
+    .item-label { font-size:14px; font-weight:500; }
+    .item-desc { font-size:12px; color:var(--muted); margin-top:3px; }
+    .now-bar { margin-top:24px; padding:14px 18px; background:linear-gradient(135deg,#1b2a1c,#1a2218); border:1px solid #2d4a2e; border-radius:10px; display:flex; align-items:center; gap:14px; }
+    .now-bar p { color:#a8c8a2; font-size:14px; }
+    .footer { margin-top:24px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--muted); display:flex; justify-content:space-between; }
+    @media (max-width:640px) { .grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="pulse"></div>
+    <h1>Claude Code · 运行中</h1>
+  </div>
+
+  <div class="grid">
+    <div class="card full">
+      <h2>CURRENT：穿搭 App</h2>
+      <div class="item"><span class="badge done">DONE</span><span class="item-label">截图 Ctrl+V 粘贴 + 自动识别颜色</span></div>
+      <div class="item"><span class="badge done">DONE</span><span class="item-label">图片链接粘贴 + 自动分析</span></div>
+      <div class="item"><span class="badge done">DONE</span><span class="item-label">服务器已启动 — http://127.0.0.1:4567</span></div>
+      <div class="item"><span class="badge done">DONE</span><span class="item-label">自动抠图 — @imgly/background-removal AI抠图（本地降级兜底）</span></div>
+      <div class="item"><span class="badge wait">TODO</span><span class="item-label">GitHub Pages 部署</span></div>
+      <div class="item"><span class="badge wait">TODO</span><span class="item-label">小红书第一篇内容</span></div>
+    </div>
+
+    <div class="card">
+      <h2>已完成</h2>
+      <div class="item"><span class="badge done">DONE</span><span class="item-label">竞品分析</span></div>
+      <div class="item"><span class="badge done">DONE</span><span class="item-label">代码优化 7 项</span></div>
+      <div class="item"><span class="badge done">DONE</span><span class="item-label">删定价区</span></div>
+      <div class="item"><span class="badge done">DONE</span><span class="item-label">改首页文案</span></div>
+      <div class="item"><span class="badge done">DONE</span><span class="item-label">合并导入按钮</span></div>
+      <div class="item"><span class="badge done">DONE</span><span class="item-label">加编辑 / 换一批</span></div>
+      <div class="item"><span class="badge done">DONE</span><span class="item-label">截图粘贴 + 图片链接导入</span></div>
+      <div class="item"><span class="badge done">DONE</span><span class="item-label">图片自动颜色分析</span></div>
+      <div class="item"><span class="badge done">DONE</span><span class="item-label">AI 抠图集成</span></div>
+    </div>
+
+    <div class="card">
+      <h2>待确认</h2>
+      <div class="item"><span class="badge done">DONE</span><span class="item-label">AI 抠图已集成 — @imgly/background-removal</span><div class="item-desc">ESM 动态加载，首次下载模型约45MB，AI优先+本地降级兜底</div></div>
+      <div class="item"><span class="badge wait">TODO</span><span class="item-label">虚拟试穿：这是另一个产品级别</span><div class="item-desc">需要 AI 模型，成本较高，建议后期再做</div></div>
+      <div class="item"><span class="badge wait">WAIT</span><span class="item-label">GitHub 仓库名？</span></div>
+    </div>
+  </div>
+
+  <div class="card full" style="margin-top:16px;">
+    <h2>关于抠图和虚拟试穿</h2>
+    <div class="item"><span class="badge done">抠图</span><span class="item-label">已接入 @imgly/background-removal (v1.7.0)</span><div class="item-desc">ESM 动态导入，small 模型约 45MB 首次下载后缓存。支持 WebGPU 加速。AI 不可用时自动降级到本地边缘检测算法。</div></div>
+    <div class="item"><span class="badge block">虚拟试穿</span><span class="item-label">需要 AI 生成模型 — 成本高</span><div class="item-desc">生成"真人穿这件衣服"的效果图，需要调用云端 AI（如 GPT-image、Stable Diffusion 等），每次生成几毛到几块钱。建议作为后期高级功能，现在不做。</div></div>
+  </div>
+
+  <div class="now-bar">
+    <div class="pulse"></div>
+    <p><strong>当前状态：</strong>AI 抠图已集成（@imgly/background-removal），支持 GPU 加速，本地边缘检测兜底。服务器 http://127.0.0.1:4567 可访问。</p>
+  </div>
+
+  <div class="footer">
+    <span>自动刷新 30s</span>
+    <span>穿搭 App 项目</span>
+  </div>
+</div>
+
+<script>setTimeout(function(){location.reload()},30000);</script>
+</body>
+</html>
