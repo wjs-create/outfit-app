@@ -456,12 +456,17 @@ function handleImageUrlInput() {
   if (state.currentImage) return; // file upload takes priority
   var url = norm(elements.itemImageUrl.value);
   if (!url || !/^https?:\/\/.+\.(jpg|jpeg|png|webp|gif)/i.test(url)) return;
-  // test-load the image
+  // First, show the image preview without crossOrigin (avoids CORS block)
+  state.currentImage = url;
+  elements.photoPreview.style.backgroundImage = 'url("'+url+'")';
+  elements.photoText.textContent = "商品图已加载，分析颜色...";
+  elements.fetchStatus.textContent = "";
+  elements.fetchStatus.style.color = "";
+
+  // Then try to load with crossOrigin for color analysis
   var img = new Image();
   img.crossOrigin = "anonymous";
   img.onload = function() {
-    state.currentImage = url;
-    elements.photoPreview.style.backgroundImage = 'url("'+url+'")';
     loadImageToCanvas(img, function(canvas) {
       var colors = analyzeImageColors(canvas);
       if (!$("#itemColor").value && colors.dominant !== "未识别") {
@@ -480,8 +485,10 @@ function handleImageUrlInput() {
     });
   };
   img.onerror = function() {
-    elements.fetchStatus.textContent = "无法加载此图片链接";
-    elements.fetchStatus.style.color = "#f85149";
+    // CORS blocked — image is still shown, just can't auto-analyze
+    elements.photoText.textContent = "图片已加载（无法自动分析，请手动填写）";
+    elements.fetchStatus.textContent = "此图片链接不支持自动分析，请手动填写颜色和标签";
+    elements.fetchStatus.style.color = "#d2991d";
   };
   img.src = url;
 }
