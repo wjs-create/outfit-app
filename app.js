@@ -244,10 +244,11 @@ function removeBackground() {
     .then(function(mod) {
       elements.removeBgButton.textContent = "AI抠图中...";
       elements.fetchStatus.textContent = "AI正在处理，大约需要2-5秒...";
-      // Use medium model for better quality; fallback to small on error
-      return mod.default(imgSrc, { model: "medium" }).catch(function(err) {
-        console.warn("Medium model failed, trying small:", err && err.message || err);
-        return mod.default(imgSrc, { model: "small" });
+      // Use isnet (FP32, highest quality) for best results
+      // publicPath needed for GitHub Pages: host model files ourselves
+      return mod.default(imgSrc, { model: "isnet" }).catch(function(err) {
+        console.warn("isnet model failed, trying medium:", err && err.message || err);
+        return mod.default(imgSrc, { model: "medium" });
       });
     })
     .then(function(blob) {
