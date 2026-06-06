@@ -194,6 +194,7 @@ function autoAnalyzeImage(imageDataUrl) {
 
 /* ── background removal ── */
 
+var _dynamicImport = new Function("specifier", "return import(specifier)");
 var _bgRemovalReady = false;
 var _bgRemovalLoading = false;
 var _bgRemovalMod = null;
@@ -201,7 +202,6 @@ var _bgRemovalMod = null;
 function loadBgRemovalModule() {
   if (_bgRemovalMod) return Promise.resolve(_bgRemovalMod);
   if (_bgRemovalLoading) {
-    // wait for the in-flight import
     return new Promise(function(resolve, reject) {
       var start = Date.now();
       function check() {
@@ -213,7 +213,7 @@ function loadBgRemovalModule() {
     });
   }
   _bgRemovalLoading = true;
-  return import("https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm")
+  return _dynamicImport("https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm")
     .then(function(mod) {
       _bgRemovalMod = mod;
       _bgRemovalReady = true;
@@ -733,13 +733,11 @@ restorePlannerDefaults();
 renderAll();
 renderOutfits();
 
-// Preload AI background removal model in background (non-blocking)
-if (typeof import === "function") {
-  setTimeout(function() {
-    loadBgRemovalModule().then(function() {
-      console.log("AI抠图模型已预加载");
-    }).catch(function() {
-      console.log("AI抠图模型预加载跳过，点击抠图时再加载");
-    });
-  }, 1200);
-}
+// Preload AI model in background (wrapped to avoid parse error)
+setTimeout(function() {
+  loadBgRemovalModule().then(function() {
+    console.log("AI抠图模型已预加载");
+  }).catch(function() {
+    console.log("AI抠图模型预加载跳过");
+  });
+}, 1200);
