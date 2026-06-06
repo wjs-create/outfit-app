@@ -244,8 +244,11 @@ function removeBackground() {
     .then(function(mod) {
       elements.removeBgButton.textContent = "AI抠图中...";
       elements.fetchStatus.textContent = "AI正在处理，大约需要2-5秒...";
-      // Use small model for speed; 'gpu' for WebGPU acceleration
-      return mod.default(imgSrc, { model: "small" });
+      // Use medium model for better quality; fallback to small on error
+      return mod.default(imgSrc, { model: "medium" }).catch(function(err) {
+        console.warn("Medium model failed, trying small:", err && err.message || err);
+        return mod.default(imgSrc, { model: "small" });
+      });
     })
     .then(function(blob) {
       var url = URL.createObjectURL(blob);
