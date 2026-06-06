@@ -56,6 +56,7 @@ function initElements() {
   elements.fetchLinkInput = $("#fetchLinkInput");
   elements.fetchButton = $("#fetchButton");
   elements.fetchStatus = $("#fetchStatus");
+  elements.seasonCheckGroup = $("#seasonCheckGroup");
   elements.removeBgButton = $("#removeBgButton");
 }
 
@@ -79,7 +80,10 @@ function saveState() {
 
 /* helpers */
 
-function splitTags(v) { return String(v||"").split(/[,，、\s]+/).map(function(t){return t.trim()}).filter(Boolean); }
+function seasonDisplayText(val) {
+  if (!val || val === "all") return "四季";
+  return String(val).split(",").map(function(s) { return seasonLabels[s] || s; }).join("·");
+}
 function norm(v) { return String(v||"").trim(); }
 
 function placeholderImage(item) {
@@ -183,7 +187,7 @@ function autoAnalyzeImage(imageDataUrl) {
       $("#itemStyles").value = WardrobeCore.suggestStyleTags(item).join(", ");
       $("#itemOccasions").value = WardrobeCore.suggestOccasionTags(item).join(", ");
       $("#itemThickness").value = WardrobeCore.inferThickness(item);
-      $("#itemSeason").value = WardrobeCore.inferSeason(item);
+      setSeasonCheckboxValue(WardrobeCore.inferSeason(item));
       elements.photoText.textContent = "图片已就绪 · 主色: "+colors.dominant;
       elements.fetchStatus.textContent = "已识别主色: "+colors.dominant+"，点击「去除背景」可抠图";
       elements.fetchStatus.style.color = "#3fb950";
@@ -373,7 +377,7 @@ function getFormItem() {
     color: norm($("#itemColor").value) || "未标注",
     material: norm($("#itemMaterial").value),
     thickness: $("#itemThickness").value,
-    season: $("#itemSeason").value,
+	season: getSeasonCheckboxValue(),
     styles: splitTags($("#itemStyles").value),
     occasions: splitTags($("#itemOccasions").value),
     url: norm($("#itemUrl").value),
@@ -389,7 +393,7 @@ function setFormItem(item) {
   $("#itemColor").value = item.color||"";
   $("#itemMaterial").value = item.material||"";
   $("#itemThickness").value = item.thickness||"medium";
-  $("#itemSeason").value = item.season||"all";
+  setSeasonCheckboxValue(item.season||"all");
   $("#itemStyles").value = (item.styles||[]).join(", ");
   $("#itemOccasions").value = (item.occasions||[]).join(", ");
   $("#itemUrl").value = item.url||"";
@@ -536,7 +540,7 @@ function renderCloset() {
     var n = tpl.content.cloneNode(true);
     n.querySelector(".item-image").style.backgroundImage = 'url("'+getImageForItem(item)+'")';
     n.querySelector("h3").textContent = item.name;
-    n.querySelector(".item-meta").textContent = [categoryLabels[item.category],item.color,thicknessLabels[item.thickness],seasonLabels[item.season]].filter(Boolean).join(" · ");
+    n.querySelector(".item-meta").textContent = [categoryLabels[item.category],item.color,thicknessLabels[item.thickness],seasonDisplayText(item.season)].filter(Boolean).join(" · ");
     var tags = n.querySelector(".tag-row");
     [].concat(item.styles||[],item.occasions||[]).slice(0,5).forEach(function(t){
       var el=document.createElement("span"); el.className="tag"; el.textContent=t; tags.appendChild(el);
@@ -655,6 +659,26 @@ function saveLead() {
     leads.unshift(lead); localStorage.setItem(LEADS_KEY,JSON.stringify(leads));
     elements.waitlistForm.reset(); elements.waitlistStatus.textContent="已保存。";
   } catch(e) { elements.waitlistStatus.textContent="保存失败。"; }
+}
+
+function getSeasonCheckboxValue() {
+  var checks = elements.seasonCheckGroup.querySelectorAll("input:checked");
+  if (!checks.length) return "all";
+  var vals = [];
+  checks.forEach(function(c) { vals.push(c.value); });
+  // "all" checked or everything selected = all
+  if (vals.indexOf("all") !== -1 || vals.length >= 5) return "all";
+  return vals.join(",");
+}
+
+function setSeasonCheckboxValue(val) {
+  var checks = elements.seasonCheckGroup.querySelectorAll("input");
+  if (!val || val === "all") {
+    checks.forEach(function(c) { c.checked = (c.value === "all"); });
+    return;
+  }
+  var parts = typeof val === "string" ? val.split(",") : val;
+  checks.forEach(function(c) { c.checked = (parts.indexOf(c.value) !== -1); });
 }
 
 /* wire events */

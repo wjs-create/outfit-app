@@ -112,7 +112,7 @@
     var tags = [].concat(item.styles || [], item.occasions || [], [item.notes, item.material].filter(Boolean)).join(" ");
 
     score += temperatureScore(item, context.temp);
-    if (item.season === "all" || item.season === desiredSeason(context.temp)) score += 2;
+    if (item.season === "all" || (item.season || "").indexOf(desiredSeason(context.temp)) !== -1) score += 2;
     if (item.occasions && item.occasions.indexOf(context.occasion) !== -1) score += 4;
     splitTags(context.styleGoal).forEach(function(word) {
       if (tags.indexOf(word) !== -1) score += 3;

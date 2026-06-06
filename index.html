@@ -112,11 +112,24 @@
                 </label>
                 <label>
                   主色
-                  <input id="itemColor" placeholder="白色" />
+                  <input id="itemColor" list="colorOptions" placeholder="白色" />
+                  <datalist id="colorOptions">
+                    <option value="白色"><option value="黑色"><option value="灰色">
+                    <option value="蓝色"><option value="牛仔蓝"><option value="藏蓝">
+                    <option value="红色"><option value="粉色"><option value="黄色">
+                    <option value="绿色"><option value="卡其"><option value="米色">
+                    <option value="棕色"><option value="紫色"><option value="格纹">
+                  </datalist>
                 </label>
                 <label>
                   材质
-                  <input id="itemMaterial" placeholder="棉 / 羊毛 / 牛仔" />
+                  <input id="itemMaterial" list="materialOptions" placeholder="棉" />
+                  <datalist id="materialOptions">
+                    <option value="棉"><option value="麻"><option value="真丝"><option value="雪纺">
+                    <option value="羊毛"><option value="羊绒"><option value="针织"><option value="牛仔">
+                    <option value="皮革"><option value="醋酸"><option value="聚酯"><option value="尼龙">
+                    <option value="灯芯绒"><option value="羽绒"><option value="混纺">
+                  </datalist>
                 </label>
                 <label>
                   厚薄
@@ -127,24 +140,35 @@
                   </select>
                 </label>
                 <label>
-                  季节
-                  <select id="itemSeason">
-                    <option value="all">四季</option>
-                    <option value="spring">春</option>
-                    <option value="summer">夏</option>
-                    <option value="autumn">秋</option>
-                    <option value="winter">冬</option>
-                  </select>
+                  季节（可多选）
+                  <div class="check-group" id="seasonCheckGroup">
+                    <label class="check-label"><input type="checkbox" value="all" data-season="all"> 四季</label>
+                    <label class="check-label"><input type="checkbox" value="spring" data-season="spring"> 春</label>
+                    <label class="check-label"><input type="checkbox" value="summer" data-season="summer"> 夏</label>
+                    <label class="check-label"><input type="checkbox" value="autumn" data-season="autumn"> 秋</label>
+                    <label class="check-label"><input type="checkbox" value="winter" data-season="winter"> 冬</label>
+                  </div>
                 </label>
               </div>
 
               <label>
                 风格标签
-                <input id="itemStyles" placeholder="通勤, 简洁, 休闲" />
+                <input id="itemStyles" list="styleOptions" placeholder="通勤" />
+                <datalist id="styleOptions">
+                  <option value="通勤"><option value="简洁"><option value="休闲"><option value="松弛">
+                  <option value="质感"><option value="利落"><option value="温柔"><option value="甜美">
+                  <option value="运动"><option value="正式"><option value="有气场"><option value="显瘦">
+                  <option value="显气色"><option value="亮色"><option value="省心"><option value="舒服">
+                </datalist>
               </label>
               <label>
                 适合场合
-                <input id="itemOccasions" placeholder="上班, 约会, 运动" />
+                <input id="itemOccasions" list="occasionOptions" placeholder="上班" />
+                <datalist id="occasionOptions">
+                  <option value="上班"><option value="约会"><option value="朋友聚会">
+                  <option value="运动"><option value="旅行"><option value="正式场合">
+                  <option value="居家"><option value="逛街"><option value="面试">
+                </datalist>
               </label>
               <label>
                 网购链接
